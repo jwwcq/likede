@@ -1,7 +1,8 @@
 <template>
   <div class="dashboard-container">
     <div class="dashboard-text">name: {{ name }}</div>
-    <svg-icon iconClass="eye-open"></svg-icon>
+    <svg-icon icon-class="eye-open" />
+    1231322222222223
   </div>
 </template>
 

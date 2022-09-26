@@ -35,6 +35,17 @@ module.exports = {
     overlay: {
       warnings: false,
       errors: true
+    },
+    proxy: {
+      '/api': {
+        target: 'http://likede2-admin.itheima.net/likede/',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api': ''
+        }
+
+      }
+
     }
     // 模拟数据
     // before: require('./mock/mock-server.js')

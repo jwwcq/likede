@@ -1,93 +1,88 @@
 <template>
-  <div :class="classObj" class="app-wrapper">
-    <div v-if="device==='mobile'&&sidebar.opened" class="drawer-bg" @click="handleClickOutside" />
-    <sidebar class="sidebar-container" />
-    <div class="main-container">
-      <div :class="{'fixed-header':fixedHeader}">
-        <navbar />
-      </div>
-      <app-main />
-    </div>
+  <div>
+    <!-- 头部  -->
+    <!--  -->
+    <el-container>
+      <el-header>
+        <div class="navbar">
+          <img style="width: 88px; position: relative; top: 4px;" class="logo" src="../assets/common/logoone.png" alt="">
+          <div class="right-menu">
+            <el-row :gutter="20">
+              <el-col :span="5">
+                <div style="height: 60px; line-height: 60px;">
+                  <el-avatar style="vertical-align: middle;">
+                    <img src="../assets/common/user.png" alt="">
+                  </el-avatar>
+                </div>
+              </el-col>
+              <el-col :span="12">
+                <div style="height: 60px; line-height: 60px;">
+                  <span style="vertical-align: middle;">欢迎您，{{ $store.state.user.token.userName }}</span>
+                </div>
+              </el-col>
+              <el-col :span="7">
+                <div style="height: 60px;line-height: 60px;">
+                  <el-tooltip class="item" effect="dark" content="退出登录" placement="bottom">
+                    <span style="vertical-align: middle; cursor: pointer;" @click="exit">退出 <span class="el-icon-caret-bottom" /></span>
+                  </el-tooltip>
+
+                </div>
+              </el-col>
+            </el-row>
+          </div>
+        </div>
+      </el-header>
+      <el-container>
+        <el-aside width="200px">
+          <!-- 侧边导航栏 S -->
+          <side-navigation />
+          <!-- 侧边导航栏 E -->
+        </el-aside>
+        <el-main>Main</el-main>
+      </el-container>
+    </el-container>
   </div>
 </template>
 
 <script>
-import { Navbar, Sidebar, AppMain } from './components'
-import ResizeMixin from './mixin/ResizeHandler'
-
+import SideNavigation from '@/layout/components/SideNavigation'
 export default {
-  name: 'Layout',
   components: {
-    Navbar,
-    Sidebar,
-    AppMain
-  },
-  mixins: [ResizeMixin],
-  computed: {
-    sidebar() {
-      return this.$store.state.app.sidebar
-    },
-    device() {
-      return this.$store.state.app.device
-    },
-    fixedHeader() {
-      return this.$store.state.settings.fixedHeader
-    },
-    classObj() {
-      return {
-        hideSidebar: !this.sidebar.opened,
-        openSidebar: this.sidebar.opened,
-        withoutAnimation: this.sidebar.withoutAnimation,
-        mobile: this.device === 'mobile'
-      }
-    }
+    SideNavigation
   },
   methods: {
-    handleClickOutside() {
-      this.$store.dispatch('app/closeSideBar', { withoutAnimation: false })
+    exit() {
+      this.$router.push('/login')
+      this.$store.commit('user/ESC')
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-  @import "~@/styles/mixin.scss";
-  @import "~@/styles/variables.scss";
-
-  .app-wrapper {
-    @include clearfix;
-    position: relative;
-    height: 100%;
-    width: 100%;
-    &.mobile.openSidebar{
-      position: fixed;
-      top: 0;
-    }
+.navbar{
+  height:60px;
+  width:100%;
+  position: fixed;
+  top:0;
+  right: 0;
+  z-index: 999;
+  background-image: url('~@/assets/common/backgroundone.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  .logo{
+    margin-top: 6px;
+    margin-left: 15px;
   }
-  .drawer-bg {
-    background: #000;
-    opacity: 0.3;
-    width: 100%;
-    top: 0;
-    height: 100%;
-    position: absolute;
-    z-index: 999;
+  .right-menu{
+    float: right;
+    width: 240px;
+    height: 60px;
+    margin-right: 24px;
+    color: #fff;
   }
-
-  .fixed-header {
-    position: fixed;
-    top: 0;
-    right: 0;
-    z-index: 9;
-    width: calc(100% - #{$sideBarWidth});
-    transition: width 0.28s;
-  }
-
-  .hideSidebar .fixed-header {
-    width: calc(100% - 54px)
-  }
-
-  .mobile .fixed-header {
-    width: 100%;
-  }
+}
+.el-aside{
+  overflow: unset;
+}
 </style>
